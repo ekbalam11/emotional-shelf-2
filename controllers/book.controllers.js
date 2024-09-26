@@ -14,15 +14,15 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
     // ¿Cómo obtener el valor dinámico ":emotion" de /api/books/recommendations/:emotion
     const { emotion } = req.params;
 
-    //Cuando esto funcione, implementar las validaciones que pide el ejercicio (que ":emotion" sea una emoción válida en la REST API)
-    const allowedEmotions = ['Inspiration', 'Curiostity', 'Espacism', 'Nostalgia', 'Happiness', 'Sadness'];
+    const error = validationResult(req);
 
-    //Si esta emoción NO está en el array de emociones tiene que dar error
-    if(!allowedEmotions.includes(emotion)) {
+    if(!errors.isEmpty()) {
         return res.status(400).json({
-            message: `The emotion ${emotion} is not a valid value`
+            message: `error when trying to find books with emotion ${emotion}`,
+            errors: errors.array()
         })
     }
+ 
     //Incluir expresión regular para que no distinga entre mayus y minus
 
     //2. Usar el ":emotion" para hacer una búsqueda en el modelo de los 20 primeros libros que incluyen la emoción ":emotion"
@@ -30,7 +30,7 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
         emotions: { $in: [emotion] }
     });
 
-    console.log('books: ', books);
+    console.log('books: ', books[0]);
     
 
     //3. Responder al cliente con un JSON con una respuesta similar a la del controlador getBooks en cuanto a su estructura de respuesta
