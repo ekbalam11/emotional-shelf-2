@@ -27,8 +27,11 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
 
     //2. Usar el ":emotion" para hacer una búsqueda en el modelo de los 20 primeros libros que incluyen la emoción ":emotion"
     const books = await Book.find({
-        emotion: { $in: [emotion] }
+        emotions: { $in: [emotion] }
     });
+
+    console.log('books: ', books);
+    
 
     //3. Responder al cliente con un JSON con una respuesta similar a la del controlador getBooks en cuanto a su estructura de respuesta
     res.status(200).json({
