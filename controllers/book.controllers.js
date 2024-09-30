@@ -1,5 +1,9 @@
 const Book = require('../models/book.model');
 const { validationResult } = require('express-validator')
+const modifyEmotionText = (emotion) => {
+    return emotion.charAt(0).toUpperCase() + emotion.slice(1).toLowerCase();
+}
+
 
 exports.getBooks = async (req, res) => {
     const books = await Book.find().limit(20);
@@ -13,8 +17,7 @@ exports.getBooks = async (req, res) => {
 exports.getRecommendactionsByEmotion = async(req, res) => {
     //1. Recuperar el valor de la ruta dinámica
     // ¿Cómo obtener el valor dinámico ":emotion" de /api/books/recommendations/:emotion
-    const { emotion } = req.params;
-
+    const emotion = modifyEmotionText(req.params.emotion);
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
@@ -43,7 +46,7 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
 }
 
     exports.getRandomRecommendationByEmotion = async (req, res) => {
-        const { emotion } = req.params;
+        const emotion = modifyEmotionText(req.params.emotion);
 
         const errors = validationResult(req);
 
@@ -67,7 +70,7 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
     
         //3. Responder al cliente con un JSON con una respuesta similar a la del controlador getBooks en cuanto a su estructura de respuesta
         res.status(200).json({
-            message: "Query executed successfully for emotion "+ emotion,
+            message: "Query executed successfully of a Random Book for the emotion "+ emotion,
             results: randomBook
         })
 }
