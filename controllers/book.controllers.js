@@ -74,3 +74,28 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
             results: randomBook
         })
 }
+
+exports.postBook = async (req, res) => {
+        console.log('title: ', req.body.title);
+    try{
+        const { title, isbn, price, description, emotions } = req.body;
+
+        const createdBook = await Book.create({
+            title,
+            isbn,
+            price,
+            description,
+            emotions
+        })
+
+        res.status(201).json({
+            "message": "Book created successfully", 
+            "bookId": createdBook
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            message: `Error posting the new book. Validation failed ${error} `
+        }); 
+}
+
+}
