@@ -67,7 +67,15 @@ exports.getRecommendactionsByEmotion = async(req, res) => {
     
         console.log('randomBook:', randomBook);
         
-    
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:9780061122415`);
+
+        const data = await response.json();
+        // console.log("🚀 ~ exports.getRandomRecommendationByEmotion= ~ data:", data)
+        console.log("data.items[0].volumeInfo.imagelinks.thumbnail: ", data.items[0].volumeInfo.imageLinks.thumbnail)
+
+        const thumbnail = data.items[0].volumeInfo.imageLinks.thumbnail;
+
+
         //3. Responder al cliente con un JSON con una respuesta similar a la del controlador getBooks en cuanto a su estructura de respuesta
         res.status(200).json({
             message: "Query executed successfully of a Random Book for the emotion "+ emotion,
@@ -90,7 +98,7 @@ exports.postBook = async (req, res) => {
 
         res.status(201).json({
             "message": "Book created successfully", 
-            "bookId": createdBook
+            "bookId": createdBook._id
         });
     } catch (error) {
         res.status(500).json({ 
